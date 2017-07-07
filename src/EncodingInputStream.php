@@ -39,15 +39,11 @@ class EncodingInputStream implements InputStream {
                 $this->buffer = null;
                 $this->source = null;
 
-                if ($buffer !== "") {
-                    if ($this->type === self::TYPE_BASE64) {
-                        return \base64_encode($buffer);
-                    }
-
-                    return \rtrim(\strtr(\base64_encode($buffer), "+/", "-_"), "=");
+                if ($this->type === self::TYPE_BASE64) {
+                    return \base64_encode($buffer);
                 }
 
-                return null;
+                return \rtrim(\strtr(\base64_encode($buffer), "+/", "-_"), "=");
             }
 
             $this->buffer .= $data;
