@@ -18,6 +18,10 @@ class EncodingInputStream implements InputStream {
         $this->source = $source;
         $this->type = $type;
         $this->buffer = "";
+
+        if ($type < 0 || $type > 1) {
+            throw new \Error("Invalid type ({$type})");
+        }
     }
 
     /** @inheritdoc */
@@ -38,9 +42,9 @@ class EncodingInputStream implements InputStream {
                 if ($buffer !== "") {
                     if ($this->type === self::TYPE_BASE64) {
                         return \base64_encode($buffer);
-                    } else {
-                        return \rtrim(\strtr(\base64_encode($buffer), "+/", "-_"), "=");
                     }
+
+                    return \rtrim(\strtr(\base64_encode($buffer), "+/", "-_"), "=");
                 }
 
                 return null;
@@ -54,9 +58,9 @@ class EncodingInputStream implements InputStream {
             if ($buffer !== "") {
                 if ($this->type === self::TYPE_BASE64) {
                     return \base64_encode($buffer);
-                } else {
-                    return \strtr(\base64_encode($buffer), "+/", "-_");
                 }
+
+                return \strtr(\base64_encode($buffer), "+/", "-_");
             }
 
             return "";
